@@ -16,50 +16,71 @@ func check_is_int(s string, multiplier int64) (int64, error) {
 	return -1, errors.New("not a digit")
 }
 
-func part_one(data_as_list []string) int64 {
-	var total int64
+var lookup = map[string]int{
+	"one":   1,
+	"two":   2,
+	"three": 3,
+	"four":  4,
+	"five":  5,
+	"six":   6,
+	"seven": 7,
+	"eight": 8,
+	"nine":  9,
+}
 
-	for _, s := range data_as_list {
-		for i := 0; i < len(s); i++ {
-			val, int_err := check_is_int(string(s[i]), 10)
-			if int_err == nil {
-				// fmt.Printf("adding new value: %d from string %s of list %s", val, string(s[i]), s)
-				total = total + val
-				break
-			}
+func check_is_text(s string, index int) (int64, error) {
+	str_len := len(s)
+	for str_val, int_val := range lookup {
+		if str_len-index >= len(str_val) && s[index:index+len(str_val)] == str_val {
+			return int64(int_val), nil
 		}
+	}
+	return -1, errors.New("no string found")
+}
 
-		for j := len(s) - 1; j >= 0; j-- {
-			val, int_err := check_is_int(string(s[j]), 1)
-			if int_err == nil {
-				total = total + val
+func check_line(s string, include_text bool) int64 {
+	var total int64
+	for i := 0; i < len(s); i++ {
+		val, int_err := check_is_int(string(s[i]), 10)
+		if int_err == nil {
+			total = total + val
+			break
+		}
+		if include_text {
+			str_val, str_err := check_is_text(s, i)
+			if str_err == nil {
+				total = total + str_val*10
 				break
 			}
 		}
 	}
 
+	for j := len(s) - 1; j >= 0; j-- {
+		val, int_err := check_is_int(string(s[j]), 1)
+		if int_err == nil {
+			total = total + val
+			break
+		}
+		if include_text {
+			str_val, str_err := check_is_text(s, j)
+			if str_err == nil {
+				total = total + str_val
+				break
+			}
+		}
+	}
 	return total
 }
 
-// var lookup = map[string]int{
-// 	"one":   1,
-// 	"two":   2,
-// 	"three": 3,
-// 	"four":  4,
-// 	"five":  5,
-// 	"six":   6,
-// 	"seven": 7,
-// 	"eight": 8,
-// 	"nine":  9,
-// }
-
-// func check_is_text(s string, index int) {
-
-// }
-
-// func part_two(data_as_list []string) int64 {
-
-// }
+func calc_results(data_as_list []string) (int64, int64) {
+	var one_total int64
+	var two_total int64
+	for _, s := range data_as_list {
+		one_total = one_total + check_line(s, false)
+		two_total = two_total + check_line(s, true)
+	}
+	return one_total, two_total
+}
 
 func main() {
 	data, parse_err := os.ReadFile("day_1_input.txt")
@@ -69,7 +90,8 @@ func main() {
 	}
 	as_string := string(data)
 	as_list := strings.Split(as_string, "\n")
-	part_one_ans := part_one(as_list)
-	print(part_one_ans)
+	part_one_ans, part_two_ans := calc_results(as_list)
+	fmt.Printf("Part one: %d\n", part_one_ans)
+	fmt.Printf("Part two: %d", part_two_ans)
 
 }
