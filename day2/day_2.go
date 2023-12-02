@@ -8,10 +8,6 @@ import (
 	"strings"
 )
 
-const MaxRed = 12
-const MaxGreen = 13
-const MaxBlue = 14
-
 var lookup = map[string]int{
 	"red":   12,
 	"green": 13,
@@ -19,7 +15,6 @@ var lookup = map[string]int{
 }
 
 func eval_game(game string) bool {
-	// 11 red, 3 blue, 11 green
 	arr_of_dice := strings.Split(game, ", ")
 	for _, die := range arr_of_dice {
 		res := strings.Split(die, " ")
@@ -32,7 +27,6 @@ func eval_game(game string) bool {
 }
 
 func evaluate_games(games string) bool {
-	//1 blue; 4 green, 5 blue; 11 red, 3 blue, 11 green; 1 red, 10 green, 4 blue; 17 red, 12 green, 7 blue; 3 blue, 19 green, 15 red
 	arr_of_games := strings.Split(games, "; ")
 	for _, game := range arr_of_games {
 		if !eval_game(game) {
@@ -78,7 +72,6 @@ func parse_line_part_two(line string) int {
 			count_and_color := strings.Split(dice, " ")
 			count, _ := strconv.Atoi(count_and_color[0])
 			color := count_and_color[1]
-
 			max_die[color] = max(max_die[color], count)
 		}
 	}
