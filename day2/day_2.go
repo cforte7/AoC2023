@@ -47,16 +47,6 @@ func parse_line_part_one(line string) int {
 	return 0
 }
 
-func part_one(file os.File) int {
-	sum := 0
-	scanner := bufio.NewScanner(&file)
-	for scanner.Scan() {
-		sum += parse_line_part_one(scanner.Text())
-	}
-
-	return sum
-}
-
 func parse_line_part_two(line string) int {
 	res := strings.Split(line, ": ")
 	arr_of_games := strings.Split(res[1], "; ")
@@ -78,22 +68,17 @@ func parse_line_part_two(line string) int {
 	return max_die["red"] * max_die["green"] * max_die["blue"]
 }
 
-func part_two(file os.File) int {
-	sum := 0
-	scanner := bufio.NewScanner(&file)
-	for scanner.Scan() {
-		sum += parse_line_part_two(scanner.Text())
-	}
-	return sum
-}
-
 func main() {
 	file, _ := os.Open("./input.txt")
 	defer file.Close()
-	part_one_ans := part_one(*file)
-	file.Seek(0, 0)
-	part_two_ans := part_two(*file)
+	sum_one := 0
+	sum_two := 0
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		sum_one += parse_line_part_one(scanner.Text())
+		sum_two += parse_line_part_two(scanner.Text())
+	}
 
-	fmt.Printf("Part one: %d\n", part_one_ans)
-	fmt.Printf("Part two: %d", part_two_ans)
+	fmt.Printf("Part one: %d\n", sum_one)
+	fmt.Printf("Part two: %d", sum_two)
 }
