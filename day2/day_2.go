@@ -63,16 +63,35 @@ func part_one(file os.File) int {
 	return sum
 }
 
-func parse_line_part_two(line string) {
+func parse_line_part_two(line string) int {
+	res := strings.Split(line, ": ")
+	arr_of_games := strings.Split(res[1], "; ")
+	var max_die = map[string]int{
+		"red":   0,
+		"green": 0,
+		"blue":  0,
+	}
 
+	for _, game := range arr_of_games {
+		arr_of_die := strings.Split(game, ", ")
+		for _, dice := range arr_of_die {
+			count_and_color := strings.Split(dice, " ")
+			count, _ := strconv.Atoi(count_and_color[0])
+			color := count_and_color[1]
+
+			max_die[color] = max(max_die[color], count)
+		}
+	}
+	return max_die["red"] * max_die["green"] * max_die["blue"]
 }
 
 func part_two(file os.File) int {
+	sum := 0
 	scanner := bufio.NewScanner(&file)
 	for scanner.Scan() {
-		parse_line_part_two(scanner.Text())
+		sum += parse_line_part_two(scanner.Text())
 	}
-	return -1
+	return sum
 }
 
 func main() {
