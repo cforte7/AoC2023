@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-func check_is_int(s string, multiplier int64) (int64, error) {
+func check_is_int(s string) (int64, error) {
 	val, int_err := strconv.ParseInt(s, 10, 64)
 	if int_err == nil {
-		return val * multiplier, nil
+		return val, nil
 	}
 	return -1, errors.New("not a digit")
 }
@@ -29,6 +29,9 @@ var lookup = map[string]int{
 }
 
 func check_is_text(s string, index int) (int64, error) {
+	// check if the index and proceeding characters match a
+	// text number. Must check that you are not out of bounds
+	// of the string
 	str_len := len(s)
 	for str_val, int_val := range lookup {
 		if str_len-index >= len(str_val) && s[index:index+len(str_val)] == str_val {
@@ -41,9 +44,9 @@ func check_is_text(s string, index int) (int64, error) {
 func check_line(s string, include_text bool) int64 {
 	var total int64
 	for i := 0; i < len(s); i++ {
-		val, int_err := check_is_int(string(s[i]), 10)
+		val, int_err := check_is_int(string(s[i]))
 		if int_err == nil {
-			total = total + val
+			total = total + val*10
 			break
 		}
 		if include_text {
@@ -56,7 +59,7 @@ func check_line(s string, include_text bool) int64 {
 	}
 
 	for j := len(s) - 1; j >= 0; j-- {
-		val, int_err := check_is_int(string(s[j]), 1)
+		val, int_err := check_is_int(string(s[j]))
 		if int_err == nil {
 			total = total + val
 			break
@@ -93,5 +96,4 @@ func main() {
 	part_one_ans, part_two_ans := calc_results(as_list)
 	fmt.Printf("Part one: %d\n", part_one_ans)
 	fmt.Printf("Part two: %d", part_two_ans)
-
 }
