@@ -1,3 +1,87 @@
 package main
 
-func main() {}
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
+const MaxRed = 12
+const MaxGreen = 13
+const MaxBlue = 14
+
+var lookup = map[string]int{
+	"red":   12,
+	"green": 13,
+	"blue":  14,
+}
+
+func eval_game(game string) bool {
+	// 11 red, 3 blue, 11 green
+	arr_of_dice := strings.Split(game, ", ")
+	for _, die := range arr_of_dice {
+		res := strings.Split(die, " ")
+		roll_count, _ := strconv.Atoi(res[0])
+		if lookup[res[1]] < roll_count {
+			return false
+		}
+	}
+	return true
+}
+
+func evaluate_games(games string) bool {
+	//1 blue; 4 green, 5 blue; 11 red, 3 blue, 11 green; 1 red, 10 green, 4 blue; 17 red, 12 green, 7 blue; 3 blue, 19 green, 15 red
+	arr_of_games := strings.Split(games, "; ")
+	for _, game := range arr_of_games {
+		if !eval_game(game) {
+			return false
+		}
+	}
+	return true
+}
+
+func parse_line_part_one(line string) int {
+	res := strings.Split(line, ": ")
+	game_title := strings.Split(res[0], " ")
+	game_num := game_title[1]
+	if evaluate_games(res[1]) {
+		as_num, _ := strconv.Atoi(game_num)
+		return as_num
+	}
+	return 0
+}
+
+func part_one(file os.File) int {
+	sum := 0
+	scanner := bufio.NewScanner(&file)
+	for scanner.Scan() {
+		sum += parse_line_part_one(scanner.Text())
+	}
+
+	return sum
+}
+
+func parse_line_part_two(line string) {
+
+}
+
+func part_two(file os.File) int {
+	scanner := bufio.NewScanner(&file)
+	for scanner.Scan() {
+		parse_line_part_two(scanner.Text())
+	}
+	return -1
+}
+
+func main() {
+	file, _ := os.Open("./input.txt")
+	defer file.Close()
+	part_one_ans := part_one(*file)
+	file.Seek(0, 0)
+	part_two_ans := part_two(*file)
+
+	fmt.Printf("Part one: %d\n", part_one_ans)
+	fmt.Printf("Part two: %d", part_two_ans)
+}
