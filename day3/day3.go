@@ -80,10 +80,6 @@ func touches_number(grid []string, x int, y int, max_x int, max_y int) []int {
 			x_check := x + x_diff
 			if 0 <= y_check && y_check <= max_y && 0 <= x_check && x_check <= max_x && unicode.IsDigit(rune(grid[y_check][x_check])) {
 				val, r := get_number(grid[y+y_diff], x_check, y_diff)
-				_, found := found_numbers[r]
-				if !found {
-					found_numbers[r] = val
-				}
 				found_numbers[r] = val
 			}
 		}
@@ -111,7 +107,6 @@ func part_two(as_rows []string, max_x int, max_y int) int {
 }
 
 func main() {
-
 	file2, _ := os.ReadFile("./input.txt")
 	as_rows := strings.Split(string(file2), "\n")
 	max_x := len(as_rows[0]) - 1
