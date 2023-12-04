@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 func parse_line(line string) ([]string, []string) {
@@ -38,6 +39,7 @@ type Card struct {
 }
 
 func main() {
+	start := time.Now()
 	file2, _ := os.ReadFile("./input.txt")
 	as_rows := strings.Split(string(file2), "\n")
 
@@ -60,5 +62,7 @@ func main() {
 	}
 
 	fmt.Printf("Part one: %d\n", part_one_ans)
-	fmt.Printf("Part two: %d", part_two_ans)
+	fmt.Printf("Part two: %d\n", part_two_ans)
+	end := time.Now()
+	fmt.Printf("Time elapsed: %d milliseconds\n", end.UnixMilli()-start.UnixMilli())
 }
