@@ -29,6 +29,5 @@ func main() {
 
 	fmt.Printf("Part one: %d\n", part_one_ans)
 	fmt.Printf("Part two: %d\n", part_two_ans)
-	end := time.Now()
-	fmt.Printf("Time elapsed: %d milliseconds\n", end.UnixMilli()-start.UnixMilli())
+	fmt.Printf("Time elapsed: %d milliseconds\n", time.Now().UnixMilli()-start.UnixMilli())
 }
