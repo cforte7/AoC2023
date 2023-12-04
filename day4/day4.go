@@ -5,32 +5,20 @@ import (
 	"math"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 )
 
-func splitNumbers(s string) []int {
-	split_list := regexp.MustCompile(`\s+`).Split(s, -1)
-	var out []int
-	for _, v := range split_list {
-		num, _ := strconv.Atoi(v)
-		out = append(out, num)
-	}
-	return out
-}
-func parse_line(line string) ([]int, []int) {
+func parse_line(line string) ([]string, []string) {
 	re := regexp.MustCompile(`:\s*([0-9\s]+)\s*\|\s*([0-9\s]+)`)
 	matches := re.FindStringSubmatch(line)
-	firstList := strings.TrimSpace(matches[1])
-	secondList := strings.TrimSpace(matches[2])
-	firstNumbers := splitNumbers(firstList)
-	secondNumbers := splitNumbers(secondList)
-	return firstNumbers, secondNumbers
+	firstList := regexp.MustCompile(`\s+`).Split(matches[1], -1)
+	secondList := regexp.MustCompile(`\s+`).Split(matches[2], -1)
+	return firstList, secondList
 }
 
 func get_line_score(line string) int {
 	winners, to_check := parse_line(line)
-	winner_lookup := map[int]bool{}
+	winner_lookup := map[string]bool{}
 	for _, v := range winners {
 		winner_lookup[v] = true
 	}
