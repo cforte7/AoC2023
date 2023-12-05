@@ -85,7 +85,7 @@ func main() {
 
 	var seeds_part_one []int
 	var seeds_part_two []int
-	for _, v := range strings.Split(strings.Trim(as_rows[0], "seeds: "), " ") {
+	for _, v := range strings.Split(strings.TrimPrefix(as_rows[0], "seeds: "), " ") {
 		as_int, _ := strconv.Atoi(v)
 		seeds_part_one = append(seeds_part_one, as_int)
 		seeds_part_two = append(seeds_part_two, as_int)
