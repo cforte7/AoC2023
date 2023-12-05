@@ -66,10 +66,8 @@ func part_two(seeds []int, map_sets []MappingSet) int {
 	for i := 0; i <= len(seeds)/2; i = i + 2 {
 		seed_start := seeds[i]
 		seed_range := seeds[i+1]
-		// println("Seed start: ", seed_start, " seed range: ", seed_range)
 		for seed := seed_start; seed < seed_start+seed_range; seed++ {
 			seed_val := seed
-			// println("checking seed: ", seed_val)
 			for _, map_set := range map_sets {
 				seed_val = map_set.apply_mapping(seed_val)
 			}
