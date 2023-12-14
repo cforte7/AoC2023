@@ -8,19 +8,17 @@ import (
 )
 
 func part_one(grid [][]string) int {
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid[i]); j++ {
-			if grid[i][j] == "O" {
-				moveup := 0
-				for i-moveup > 0 && grid[i-moveup-1][j] == "." {
-					moveup += 1
-				}
-
-				if moveup > 0 {
-					grid[i][j] = "."
-					grid[i-moveup][j] = "O"
-				}
-
+	row_count := len(grid)
+	col_count := len(grid[0])
+	for col := col_count - 1; col >= 0; col-- {
+		stop := 0
+		for row := 0; row < row_count; row++ {
+			if grid[row][col] == "O" {
+				grid[row][col] = "."
+				grid[stop][col] = "O"
+				stop += 1
+			} else if grid[row][col] == "#" {
+				stop = row + 1
 			}
 		}
 	}
@@ -38,6 +36,10 @@ func part_one(grid [][]string) int {
 	return tot
 }
 
+func part_two(grid [][]string) int {
+	return -1
+}
+
 func main() {
 	start := time.Now()
 	file, _ := os.ReadFile("./input.txt")
@@ -51,7 +53,7 @@ func main() {
 	}
 
 	part_one_ans := part_one(full_split)
-	part_two_ans := 0
+	part_two_ans := part_two(full_split)
 
 	fmt.Printf("Part one: %d\n", part_one_ans)
 	fmt.Printf("Part two: %d\n", part_two_ans)
